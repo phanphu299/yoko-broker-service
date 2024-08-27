@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Function", "function-listener-mqtt\Function.csproj", "{D94DC511-862C-435E-854C-50410D4B5647}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "function-listener-mqtt", "function-listener-mqtt", "{B29C96AC-994A-407D-8417-E16E9E5F9B99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "function-listener-eventhub", "function-listener-eventhub", "{8A1E2935-89E1-4974-81E8-C035C3725F80}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "function-listener-restapi", "function-listener-restapi", "{1A67B590-DBE1-452D-8E98-62B23FE702FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Function", "function-listener-eventhub\Function.csproj", "{7B366F3E-EE11-468E-825F-B07DE557DDCF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Function", "function-listener-restapi\Function.csproj", "{F4BD2361-C1AE-41EB-961F-909FF6DE9BF8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "function-listener-coap", "function-listener-coap", "{CD615E8B-5FF3-4D38-863A-A24651C16BB4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Function", "function-listener-coap\Function.csproj", "{2A0D026C-86A2-4728-B911-97F8B2FEFE7A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D94DC511-862C-435E-854C-50410D4B5647}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D94DC511-862C-435E-854C-50410D4B5647}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D94DC511-862C-435E-854C-50410D4B5647}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D94DC511-862C-435E-854C-50410D4B5647}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B366F3E-EE11-468E-825F-B07DE557DDCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B366F3E-EE11-468E-825F-B07DE557DDCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B366F3E-EE11-468E-825F-B07DE557DDCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B366F3E-EE11-468E-825F-B07DE557DDCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4BD2361-C1AE-41EB-961F-909FF6DE9BF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4BD2361-C1AE-41EB-961F-909FF6DE9BF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4BD2361-C1AE-41EB-961F-909FF6DE9BF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4BD2361-C1AE-41EB-961F-909FF6DE9BF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A0D026C-86A2-4728-B911-97F8B2FEFE7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A0D026C-86A2-4728-B911-97F8B2FEFE7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A0D026C-86A2-4728-B911-97F8B2FEFE7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A0D026C-86A2-4728-B911-97F8B2FEFE7A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D94DC511-862C-435E-854C-50410D4B5647} = {B29C96AC-994A-407D-8417-E16E9E5F9B99}
+		{7B366F3E-EE11-468E-825F-B07DE557DDCF} = {8A1E2935-89E1-4974-81E8-C035C3725F80}
+		{F4BD2361-C1AE-41EB-961F-909FF6DE9BF8} = {1A67B590-DBE1-452D-8E98-62B23FE702FC}
+		{2A0D026C-86A2-4728-B911-97F8B2FEFE7A} = {CD615E8B-5FF3-4D38-863A-A24651C16BB4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {925AF06D-C4A9-48F1-9F03-430C1ED6234D}
+	EndGlobalSection
+EndGlobal

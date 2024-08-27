@@ -1,0 +1,5599 @@
+{
+	"info": {
+		"_postman_id": "48fb082a-1305-45bc-a983-faaa98f4d8e5",
+		"name": "Broker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17694372"
+	},
+	"item": [
+		{
+			"name": "Setup",
+			"item": [
+				{
+					"name": "001_Authentication",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get access token return status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Get access token has value\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('access_token');\r",
+									"   pm.environment.set(\"access_token\", jsonData.access_token);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{sa_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{sa_client_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{idp}}/connect/token",
+							"host": [
+								"{{idp}}"
+							],
+							"path": [
+								"connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get User Info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response has data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('id');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{user-service}}/usr/users/info?forceUpdate=true",
+							"host": [
+								"{{user-service}}"
+							],
+							"path": [
+								"usr",
+								"users",
+								"info"
+							],
+							"query": [
+								{
+									"key": "forceUpdate",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Event Type Schemas",
+			"item": [
+				{
+					"name": "Get Event Type Kafka",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property details`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('details')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/schemas?type={{EVENT_TYPE_KAFKA}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"schemas"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "{{EVENT_TYPE_KAFKA}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Event Type RabbitMQ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property details`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('details')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/schemas?type={{EVENT_TYPE_RABBITMQ}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"schemas"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "{{EVENT_TYPE_RABBITMQ}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Event Type Event Hub",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property details`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('details')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/schemas?type={{EVENT_TYPE_AZURE_EVENT_HUB}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"schemas"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "{{EVENT_TYPE_AZURE_EVENT_HUB}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Event Type Webhook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property details`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('details')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/schemas?type={{EVENT_TYPE_WEBHOOK}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"schemas"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "{{EVENT_TYPE_WEBHOOK}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Brokers",
+			"item": [
+				{
+					"name": "Hubs",
+					"item": [
+						{
+							"name": "Add Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Created broker with name ${pm.environment.get('broker_name')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('id');\r",
+											"    var id = jsonData.id;\r",
+											"    pm.environment.set('broker_id', id);\r",
+											"    pm.environment.set('broker_name', jsonData.name);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"broker_{{$timestamp}}\",\r\n    \"type\": \"BROKER_EVENT_HUB\",\r\n    \"details\" : {\r\n        \"event_hub_name\": \"thanh\",\r\n        \"tier\": \"Standard\",\r\n        \"throughput_units\": 1,\r\n        \"max_throughput_units\": 20,\r\n        \"auto_inflate\": true,\r\n        \"sasTokenDuration\": 60\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Exist Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "HEAD",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Exist Broker- Not Found",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "HEAD",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{$guid}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{$guid}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Exist Brokers",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    \"{{broker_id}}\"\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/exist",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"exist"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Exist Brokers- Not Found",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    \"{{$guid}}\"\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/exist",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"exist"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Update broker id ${pm.environment.get('broker_id')} to name ${pm.environment.get('broker_name')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('name').eq(pm.environment.get('broker_name') + '_update');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{broker_name}}_update\",\r\n    \"type\": \"{{BROKER_EVENT_HUB}}\",\r\n    \"details\" :{\r\n        \"event_hub_name\": \"hub_name_update\",\r\n        \"tier\": \"BRKTIER\",\r\n        \"throughput_units\": 15,\r\n        \"max_throughput_units\": 50,\r\n        \"auto_inflate\": true,\r\n        \"sasTokenDuration\": 60\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Brokers By ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Get broker Id ${pm.environment.get('broker_id')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.id).to.be.equal(pm.environment.get('broker_id'));\r",
+											"    var lookup = jsonData.lookup;\r",
+											"    pm.expect(lookup.id).to.be.equal(pm.environment.get('BROKER_EVENT_HUB'));\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Broker Schema",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Has content property details`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('details')\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/schemas?type={{BROKER_EVENT_HUB}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"schemas"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "{{BROKER_EVENT_HUB}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Seach Broker",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Seach Broker`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    var data = jsonData.data;\r",
+											"    pm.expect(data.length > 0).to.eql(true);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"clientOverride\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/search",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"search"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Broker",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Delete Integration`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('isSuccess').equal(true)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Broker 2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Created broker with name ${pm.environment.get('broker_name_2')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('id');\r",
+											"    var id = jsonData.id;\r",
+											"    pm.environment.set('broker_test_2_id', id);\r",
+											"    pm.environment.set('broker_name_2', jsonData.name);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"broker_2_{{$timestamp}}\",\r\n    \"type\": \"{{BROKER_EVENT_HUB}}\",\r\n    \"details\" : {\r\n        \"event_hub_name\": \"\",\r\n        \"tier\": \"\",\r\n        \"throughput_units\": 10,\r\n        \"max_throughput_units\": 50,\r\n        \"auto_inflate\": true,\r\n        \"sasTokenDuration\": 60\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Brokers",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Delete Integration`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('isSuccess').equal(true)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    \"{{broker_test_2_id}}\"\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Broker IoT-Hub",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Created broker with name ${pm.environment.get('broker_name_2')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('id');\r",
+											"    var id = jsonData.id;\r",
+											"    pm.environment.set('broker_test_2_id', id);\r",
+											"    pm.environment.set('broker_name_2', jsonData.name);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Issac-Groups-300322-{{$timestamp}}\",\r\n    \"type\": \"BROKER_IOT_HUB\",\r\n    \"details\": {\r\n        \"tier\": \"B1\",\r\n        \"number_of_hub_units\": 2,\r\n        \"device_to_cloud_partitions\": 4,\r\n        \"defender_for_iot\": false,\r\n        \"enable_sharing\":true,\r\n        \"show_event_hub\":false\r\n    }\r\n}\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Brokers",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Delete Integration`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('isSuccess').equal(true)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    \"{{broker_test_2_id}}\"\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tags",
+					"item": [
+						{
+							"name": "Add Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Created broker with name ${pm.environment.get('broker_name')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('id');\r",
+											"    var id = jsonData.id;\r",
+											"    pm.environment.set('broker_tag_id', id);\r",
+											"    pm.environment.set('broker_tag_name', jsonData.name);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"broker_{{$timestamp}}\",\r\n    \"type\": \"BROKER_EVENT_HUB\",\r\n    \"details\": {\r\n        \"event_hub_name\": \"thanh\",\r\n        \"tier\": \"Standard\",\r\n        \"throughput_units\": 1,\r\n        \"max_throughput_units\": 20,\r\n        \"auto_inflate\": true,\r\n        \"sasTokenDuration\": 60\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"key\": \"key1\",\r\n            \"value\": \"value1\"\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Brokers By ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Get broker Id ${pm.environment.get('broker_id')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    var tags = jsonData.tags;\r",
+											"    var tag_id = tags[0].id;\r",
+											"    pm.expect(tags.length).to.be.equal(1);\r",
+											"    pm.environment.set('tag_id', tag_id);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_tag_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_tag_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Update broker id ${pm.environment.get('broker_id')} to name ${pm.environment.get('broker_name')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('name').eq(pm.environment.get('broker_tag_name') + '_update');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{broker_tag_name}}_update\",\r\n    \"type\": \"{{BROKER_EVENT_HUB}}\",\r\n    \"details\": {\r\n        \"event_hub_name\": \"hub_name_update\",\r\n        \"tier\": \"BRKTIER\",\r\n        \"throughput_units\": 15,\r\n        \"max_throughput_units\": 50,\r\n        \"auto_inflate\": true,\r\n        \"sasTokenDuration\": 60\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"id\": {{tag_id}},\r\n            \"key\": \"key\",\r\n            \"value\": \"value1\"\r\n        },\r\n        {\r\n            \"key\": \"key2\",\r\n            \"value\": \"value2\"\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_tag_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_tag_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Brokers By ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Get broker Id ${pm.environment.get('broker_id')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    var tags = jsonData.tags;\r",
+											"    pm.expect(tags.length).to.be.equal(2);\r",
+											"    var tag_id_2 = tags[1].id;\r",
+											"    pm.environment.set('tag_id_2', tag_id_2);\r",
+											"    pm.environment.set('broker_tag_name_2', jsonData.name);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_tag_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_tag_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Seach Broker",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Seach Broker`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    var data = jsonData.data;\r",
+											"    pm.expect(data.length > 0).to.eql(true);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"pageIndex\": 0,\r\n    \"pageSize\": 20,\r\n    \"filter\": \"{\\\"and\\\":[{\\\"queryKey\\\":\\\"name.ToLower()\\\",\\\"queryType\\\":\\\"text\\\",\\\"operation\\\":\\\"contains\\\",\\\"queryValue\\\":\\\"broker\\\"},{\\\"or\\\":[{\\\"queryKey\\\":\\\"EntityTags.TagId\\\",\\\"queryType\\\":\\\"text\\\",\\\"operation\\\":\\\"or\\\",\\\"queryValue\\\":\\\"1, 2\\\"}]}]}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/search",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"search"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Broker",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Delete Integration`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('isSuccess').equal(true)\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_tag_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_tag_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Broker 2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Created broker with name ${pm.environment.get('broker_name_2')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('id');\r",
+											"    var id = jsonData.id;\r",
+											"    pm.environment.set('broker_test_2_id', id);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"broker_2_{{$timestamp}}\",\r\n    \"type\": \"{{BROKER_EVENT_HUB}}\",\r\n    \"details\": {\r\n        \"event_hub_name\": \"\",\r\n        \"tier\": \"\",\r\n        \"throughput_units\": 10,\r\n        \"max_throughput_units\": 50,\r\n        \"auto_inflate\": true,\r\n        \"sasTokenDuration\": 60\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"key\": \"key1\",\r\n            \"value\": \"value1\"\r\n        },\r\n        {\r\n            \"key\": \"key2\",\r\n            \"value\": \"value2\"\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Brokers By ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Get broker Id ${pm.environment.get('broker_id')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.tags[0].id).to.be.equal(pm.environment.get('tag_id'));\r",
+											"    pm.expect(jsonData.tags[1].id).to.be.equal(pm.environment.get('tag_id_2'));\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_test_2_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_test_2_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Brokers",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Delete Integration`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('isSuccess').equal(true)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    \"{{broker_test_2_id}}\"\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "EMQX-MQTT",
+					"item": [
+						{
+							"name": "Get Broker Schema",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Has content property details`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('details')\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/schemas?type={{BROKER_EMQX_MQTT}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"schemas"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "{{BROKER_EMQX_MQTT}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Created broker with name ${pm.environment.get('broker_name')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('id');\r",
+											"    var id = jsonData.id;\r",
+											"    pm.environment.set('broker_id', id);\r",
+											"    pm.environment.set('broker_name', jsonData.name);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"broker_{{$timestamp}}\",\r\n    \"type\": \"{{BROKER_EMQX_MQTT}}\",\r\n    \"details\" : {\r\n        \"port\": \"1883\",\r\n        \"authentication_type\": \"Simple\",\r\n        }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Exist Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "HEAD",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Update broker id ${pm.environment.get('broker_id')} to name ${pm.environment.get('broker_name')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('name').eq(pm.environment.get('broker_name') + '_update');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{broker_name}}_update\",\r\n    \"type\": \"{{BROKER_EMQX_MQTT}}\",\r\n    \"details\" : {\r\n        \"topic_name\": \"mytopic\",\r\n        \"port_tcp\": \"1883\",\r\n        \"qos\": \"1\",\r\n        \"authentication_type\": \"Basic\",\r\n        \"token_duration\": 365\r\n       }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Brokers By ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Get broker Id ${pm.environment.get('broker_id')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.id).to.be.equal(pm.environment.get('broker_id'));\r",
+											"    var lookup = jsonData.lookup;\r",
+											"    pm.expect(lookup.id).to.be.equal(pm.environment.get('BROKER_EMQX_MQTT'));\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Seach Broker",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Seach Broker`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    var data = jsonData.data;\r",
+											"    pm.expect(data.length > 0).to.eql(true);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"clientOverride\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/search",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"search"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Broker",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Delete Integration`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('isSuccess').equal(true)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Exist Broker - Not found after delete",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "HEAD",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "EMQX-COAP",
+					"item": [
+						{
+							"name": "Get Broker Schema",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Has content property details`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('details')\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/schemas?type={{BROKER_EMQX_COAP}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"schemas"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "{{BROKER_EMQX_COAP}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Created broker with name ${pm.environment.get('broker_name')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('id');\r",
+											"    var id = jsonData.id;\r",
+											"    pm.environment.set('broker_id', id);\r",
+											"    pm.environment.set('broker_name', jsonData.name);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"broker_{{$timestamp}}\",\r\n    \"type\": \"{{BROKER_EMQX_COAP}}\",\r\n    \"details\" : {\r\n        \"connection_mode\": \"Connection\",\r\n        }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Exist Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "HEAD",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Broker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Update broker id ${pm.environment.get('broker_id')} to name ${pm.environment.get('broker_name')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('name').eq(pm.environment.get('broker_name') + '_update');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{broker_name}}_update\",\r\n    \"type\": \"{{BROKER_EMQX_COAP}}\",\r\n    \"details\" : {\r\n        \"topic_name\": \"mytopic\",\r\n        \"port_udp\": \"5683\",\r\n        \"qos\": \"1\",\r\n        \"connection_mode\": \"Connection\",\r\n        \"token_duration\": 365\r\n       }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Brokers By ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(`Get broker Id ${pm.environment.get('broker_id')}`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.id).to.be.equal(pm.environment.get('broker_id'));\r",
+											"    var lookup = jsonData.lookup;\r",
+											"    pm.expect(lookup.id).to.be.equal(pm.environment.get('BROKER_EMQX_COAP'));\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Seach Broker",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Seach Broker`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    var data = jsonData.data;\r",
+											"    pm.expect(data.length > 0).to.eql(true);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"clientOverride\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/bkr/brokers/search",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"search"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Broker",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(`Delete Integration`, function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.has.property('isSuccess').equal(true)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Exist Broker - Not found after delete",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"The request has status code 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "HEAD",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/bkr/brokers/{{broker_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"bkr",
+										"brokers",
+										"{{broker_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Integrations",
+			"item": [
+				{
+					"name": "Get Application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property details`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('details');\r",
+									"    pm.expect(jsonData.details[0]).to.has.property('endpoint');\r",
+									"    const endpoint = jsonData.details[0].endpoint;\r",
+									"    pm.expect(endpoint).to.equal('http://localhost:6001/acm/applications');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/schemas?type=EVENT_TYPE_AHI_APPLICATION",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"schemas"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "EVENT_TYPE_AHI_APPLICATION"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Integration Schema",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property details`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('details')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/schemas?type={{INTEGRATION_WAYLAY_API}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"schemas"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "{{INTEGRATION_WAYLAY_API}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Integration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Contains integration_id`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('id');\r",
+									"    var id = jsonData.id;\r",
+									"    pm.environment.set('integration_id', id);\r",
+									"    var name = jsonData.name;\r",
+									"    pm.environment.set('integration_name', name);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('content')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"waylay integration 1 {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Integration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "HEAD",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail Check Integration- Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "HEAD",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{$guid}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{$guid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Integrations",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    \"{{integration_id}}\"\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/exist",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"exist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail Check Integrations- Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    \"{{$guid}}\"\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/exist",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"exist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Integration Second",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Contains integration_id`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('id');\r",
+									"    var id = jsonData.id;\r",
+									"    var name = jsonData.name;\r",
+									"    pm.environment.set('integration_id_2', id);\r",
+									"    pm.environment.set('integration_name_2', name);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"Waylay integration_{{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"\",\r\n        \"broker_endpoint\":\"\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Integration Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Match with integrations Id ${pm.environment.get('integration_id')}`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.equal(pm.environment.get('integration_id'));\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('content')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Integration By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Get Integration Id ${pm.environment.get('integration_id')}`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.equal(pm.environment.get('integration_id'));\r",
+									"    var lookup = jsonData.lookup;\r",
+									"    pm.expect(lookup.id).to.be.equal(pm.environment.get('INTEGRATION_WAYLAY_API'));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Integration::EventHubs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Contains integration_id`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('id');\r",
+									"    var id = jsonData.id;\r",
+									"    pm.environment.set('integration_id_3', id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"INTEGRATION_EVENT_HUB\",\r\n    \"name\":\"Evenhubs integration_{{$guid}}\",\r\n    \"details\":{\r\n        \"connection_string\":\"Endpoint=sb://ahs-qc-test-only-sea-evh.servicebus.windows.net/;SharedAccessKeyName=Root;SharedAccessKey=YZ1T6k6LO785yAPTbbdUI74xGvztPFR2TkE3BcoV5is=;EntityPath=ingestion\",\r\n        \"event_hub_name\":\"ingestion\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Integration::EventHubs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Match with integrations Id ${pm.environment.get('integration_id_3')}`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.equal(pm.environment.get('integration_id_3'));\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('content')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_EVENT_HUB}}\",\r\n    \"name\":\"Evenhubs integration{{$timestamp}}\",\r\n    \"details\":{\r\n        \"connection_string\":\"Endpoint=sb://ahs-qc-test-only-sea-evh.servicebus.windows.net/;SharedAccessKeyName=Root;SharedAccessKey=YZ1T6k6LO785yAPTbbdUI74xGvztPFR2TkE3BcoV5is=;EntityPath=ingestion\",\r\n        \"event_hub_name\":\"ingestion\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_3}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_3}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Seach Integration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Seach Integration`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    var data = jsonData.data;\r",
+									"    pm.expect(data.length > 0).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"clientOverride\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/search",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Integration::Green Koncept",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Contains integration_id`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('id');\r",
+									"    var id = jsonData.id;\r",
+									"    pm.environment.set('integration_id_4', id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"GREEN_KONCEPT_API\",\r\n    \"name\":\"Green koncept integration_{{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://eems.apps.yokogawa.com/api/v1/auth/token\",\r\n        \"client_id\":\"gkapi\",\r\n        \"client_secret\":\"c1ce14f8eee2ab1e5e432b8fae78ab961ac38ea8099\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Integration::Green Koncept- Endpoint Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Contains integration_id`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('id');\r",
+									"    var id = jsonData.id;\r",
+									"    pm.environment.set('integration_id_5', id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"GREEN_KONCEPT_API\",\r\n    \"name\":\"Green koncept integration_{{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://eems.apps.yokogawa1.com\",\r\n        \"client_id\":\"gkapi\",\r\n        \"client_secret\":\"c1ce14f8eee2ab1e5e432b8fae78ab961ac38ea8099\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Integration::Green Koncept- Client_id Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Integration::Green Koncept- Client_id Invalid has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Create Integration::Green Koncept- Client_id Invalid`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('id');\r",
+									"    var id = jsonData.id;\r",
+									"    pm.environment.set('integration_id_6', id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"GREEN_KONCEPT_API\",\r\n    \"name\":\"Green koncept integration_{{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://eems.apps.yokogawa.com\",\r\n        \"client_id\":\"gkpi\",\r\n        \"client_secret\":\"c1ce14f8eee2ab1e5e432b8fae78ab961ac38ea8099\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Integration::Green Koncept- Client_Secret Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Integration::Green Koncept- Client_Secret Invalid has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Create Integration::Green Koncept- Client_Secret Invalid`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('id');\r",
+									"    var id = jsonData.id;\r",
+									"    pm.environment.set('integration_id_7', id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"GREEN_KONCEPT_API\",\r\n    \"name\":\"Green koncept integration_{{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://eems.apps.yokogawa.com\",\r\n        \"client_id\":\"gkapi\",\r\n        \"client_secret\":\"c2ce14f8eee2ab1e5e432b8fae78ab961ac38ea8099\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Integration::Green Koncept",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Match with integrations Id ${pm.environment.get('integration_id_4')}`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.equal(pm.environment.get('integration_id_4'));\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('content')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"type\":\"GREEN_KONCEPT_API\",\r\n    \"name\":\"Green koncept integration upadate_{{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://eems.apps.yokogawa.com/\",\r\n        \"client_id\":\"gkapi\",\r\n        \"client_secret\":\"c1ce14f8eee2ab1e5e432b8fae78ab961ac38ea8099\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_4}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_4}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail Fetch GreenKoncept- Endpoint Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Fail Fetch GreenKoncept- Endpoint Not Found has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(`Fail Fetch GreenKoncept- Endpoint Not Found`, function () {\r",
+									"     const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('isSuccess');\r",
+									"    pm.expect(jsonData.isSuccess).to.equal(false);\r",
+									"    pm.expect(jsonData.message).to.include(\"Exception of type 'AHI.Infrastructure.Exception.SystemCallServiceException' was thrown.\");\r",
+									"    pm.expect(jsonData.errorCode).to.equal('ERROR.SYSTEM.CALL_SERVICE');\r",
+									"    pm.expect(jsonData.detailCode).to.equal('BROKER.INTEGRATION.FETCH.GREEN_KONCEPT_API_ERROR');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_5}}/fetch?type=nodes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_5}}",
+								"fetch"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "nodes"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail Fetch GreenKoncept- Cause Client Id Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Fail Fetch GreenKoncept- Cause Client Id Invalid has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(`Fail Fetch GreenKoncept- Cause Client Id Invalid`, function () {\r",
+									"     const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('isSuccess');\r",
+									"    pm.expect(jsonData.isSuccess).to.equal(false);\r",
+									"    pm.expect(jsonData.message).to.include(\"Exception of type 'AHI.Infrastructure.Exception.SystemCallServiceException' was thrown.\");\r",
+									"    pm.expect(jsonData.errorCode).to.equal('ERROR.SYSTEM.CALL_SERVICE');\r",
+									"    pm.expect(jsonData.detailCode).to.equal('BROKER.INTEGRATION.FETCH.GREEN_KONCEPT_API_ERROR');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_6}}/fetch?type=nodes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_6}}",
+								"fetch"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "nodes"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail Fetch GreenKoncept- Cause Client Secret Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Fail Fetch GreenKoncept- Cause Client Secret Invalid has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(`Fail Fetch GreenKoncept- Cause Client Secret Invalid`, function () {\r",
+									"     const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('isSuccess');\r",
+									"    pm.expect(jsonData.isSuccess).to.equal(false);\r",
+									"    pm.expect(jsonData.message).to.include(\"Exception of type 'AHI.Infrastructure.Exception.SystemCallServiceException' was thrown.\");\r",
+									"    pm.expect(jsonData.errorCode).to.equal('ERROR.SYSTEM.CALL_SERVICE');\r",
+									"    pm.expect(jsonData.detailCode).to.equal('BROKER.INTEGRATION.FETCH.GREEN_KONCEPT_API_ERROR');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_7}}/fetch?type=nodes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_7}}",
+								"fetch"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "nodes"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch GreenKoncept",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Match with integrations Id ${pm.environment.get('integration_id')}`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('data');\r",
+									"    const node_id = jsonData.data[0].id;\r",
+									"    pm.environment.set('node_id', node_id);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_4}}/fetch?type=nodes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_4}}",
+								"fetch"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "nodes"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch GreenKoncept With Type Devices",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Match with integrations Id ${pm.environment.get('integration_id')}`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('data');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_4}}/fetch?type=devices",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_4}}",
+								"fetch"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "devices"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch GreenKoncept Measures",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    //hotfix cause now dont have permission for that api=> please return code when have permission \r",
+									"    //pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Response has data`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    //hotfix cause now dont have permission for that api=> please return code when have permission \r",
+									"    //pm.expect(jsonData).to.have.property('data');\r",
+									"    //const measure_key = jsonData.data[0].name;\r",
+									"    //pm.environment.set('measure_key', measure_key);\r",
+									"    pm.environment.set('measure_key', 'AccelX');\r",
+									"    pm.environment.set('timeseriesStart', Math.floor(Date.now()/1000)- 120);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_4}}/fetch?type=measures&data={{node_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_4}}",
+								"fetch"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "measures"
+								},
+								{
+									"key": "data",
+									"value": "{{node_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch GreenKoncept Measures With Type Metrics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    //hotfix cause now dont have permission for that api=> please return code when have permission \r",
+									"    //pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Response has data`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    //hotfix cause now dont have permission for that api=> please return code when have permission \r",
+									"    //pm.expect(jsonData).to.have.property('data');\r",
+									"    //const measure_key = jsonData.data[0].name;\r",
+									"    //pm.environment.set('measure_key', measure_key);\r",
+									"    pm.environment.set('measure_key', 'AccelX');\r",
+									"    pm.environment.set('timeseriesStart', Math.floor(Date.now()/1000)- 120);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_4}}/fetch?type=metrics&data={{node_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_4}}",
+								"fetch"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "metrics"
+								},
+								{
+									"key": "data",
+									"value": "{{node_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Timeseries GreenKoncept",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Response has data`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).gt(0);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_4}}/series?entityId={{node_id}}&metricKey={{measure_key}}&start={{timeseriesStart}}&end={{$timestamp}}&grouping=0",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_4}}",
+								"series"
+							],
+							"query": [
+								{
+									"key": "entityId",
+									"value": "{{node_id}}"
+								},
+								{
+									"key": "metricKey",
+									"value": "{{measure_key}}"
+								},
+								{
+									"key": "start",
+									"value": "{{timeseriesStart}}"
+								},
+								{
+									"key": "end",
+									"value": "{{$timestamp}}"
+								},
+								{
+									"key": "grouping",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Integration - having tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Contains integration_id_tag`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('id');\r",
+									"    var id = jsonData.id;\r",
+									"    pm.environment.set('integration_id_tag', id);\r",
+									"    var name = jsonData.name;\r",
+									"    pm.environment.set('integration_name', name);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('content')\r",
+									"    pm.expect(jsonData.tags.length).to.be.equal(2)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"tags\": [  {\"key\": \"abc\",   \"value\": \"xyz\"}, {\"key\": \"123\",   \"value\": \"789\"}   ],\r\n    \"name\":\"waylay integration 1 {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Integration By ID - having tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Get Integration Id ${pm.environment.get('integration_id_tag')}`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.equal(pm.environment.get('integration_id_tag'));\r",
+									"    pm.expect(jsonData.tags.length).to.be.equal(2)\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_tag}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_tag}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Integration - having tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Match with integrations Id ${pm.environment.get('integration_id_tag')}`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.equal(pm.environment.get('integration_id_tag'));\r",
+									"});\r",
+									"\r",
+									"pm.test(`Has content property`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.tags.length).to.be.equal(3)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"tags\": [  {\"key\": \"abc\",   \"value\": \"xyz\"}, {\"key\": \"666\",   \"value\": \"789\"}, {\"key\": \"666\",   \"value\": \"789000\"}   ],\r\n    \"name\":\"integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_tag}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_tag}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Integration By ID - having tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Get Integration Id ${pm.environment.get('integration_id_tag')}`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.equal(pm.environment.get('integration_id_tag'));\r",
+									"    pm.expect(jsonData.tags.length).to.be.equal(3)\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id_tag}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id_tag}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Listeners",
+			"item": [
+				{
+					"name": "Get Event Hubs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Get all listeners have data`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).greaterThan(0);\r",
+									"    pm.environment.set('listener_id', jsonData[0].id)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/listeners/eventhubs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"listeners",
+								"eventhubs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Active",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Can update the status `, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('isSuccess');\r",
+									"    pm.expect(jsonData.isSuccess).equal(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/listeners/{{listener_id}}/active",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"listeners",
+								"{{listener_id}}",
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get greenkoncept",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(`Get all listeners have data`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).greaterThan(0);\r",
+									"    pm.environment.set('listener_id', jsonData[0].id)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/listeners/greenkoncept",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"listeners",
+								"greenkoncept"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Active greenkoncept",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Can update the status `, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('isSuccess');\r",
+									"    pm.expect(jsonData.isSuccess).equal(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/listeners/{{listener_id}}/active",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"listeners",
+								"{{listener_id}}",
+								"active"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Integration Case Fail",
+			"item": [
+				{
+					"name": "Fail Add Create Integration Cause Duplication Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(`Fail Add Create Integration Cause Duplication Name`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSuccess).to.eq(false);\r",
+									"    pm.expect(jsonData.errorCode).eq('ERROR.ENTITY.VALIDATION');\r",
+									"    pm.expect(jsonData).to.have.property(\"fields\").to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.fields.length).to.gt(0);\r",
+									"    pm.expect(jsonData.fields[0]).to.have.property(\"errorCode\").to.eq(\"ERROR.ENTITY.VALIDATION.FIELD_DUPLICATED\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"{{integration_name_2}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"\",\r\n        \"broker_endpoint\":\"\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail Update Integration cause Wrong ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get access token return status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"pm.test(\"Fails Update Integration Cause Wrong ID\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property('errorCode').to.eq(\"ERROR.ENTITY.NOT_FOUND\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"Waylay integration {{$guid}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\",\r\n        \"sub_type\":\"waylay\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{$guid}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{$guid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail Update Integration Cause Duplication Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(`Fail Update Integration Cause Duplication Name of integrations Id ${pm.environment.get('integration_id_2')}`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSuccess).to.eq(false);\r",
+									"    pm.expect(jsonData.errorCode).eq('ERROR.ENTITY.VALIDATION');\r",
+									"    pm.expect(jsonData).to.have.property(\"fields\").to.be.an(\"array\");\r",
+									"    pm.expect(jsonData.fields.length).to.gt(0);\r",
+									"    pm.expect(jsonData.fields[0]).to.have.property(\"errorCode\").to.eq(\"ERROR.ENTITY.VALIDATION.FIELD_DUPLICATED\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_WAYLAY_API}}\",\r\n    \"name\":\"{{integration_name_2}}\",\r\n    \"details\":{\r\n        \"endpoint\":\"https://dxpeng.msa2.apps.yokogawa.build\",\r\n        \"broker_endpoint\":\"https://broker.msa2.apps.yokogawa.build\",\r\n        \"api_key\":\"9c57fdb52555462f99ca5680\",\r\n        \"api_secret\":\"0Slx3JTqUEq9VqG8rzW+1KLEuxl283P9\",\r\n        \"pooling_interval\":\"2\",\r\n        \"sub_type\":\"waylay\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{integration_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{integration_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Integration::EventHubs with wrong connectionstring",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(`Connection string error field`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    console.log(jsonData);\r",
+									"    pm.expect(jsonData).to.has.property('fields');\r",
+									"    pm.expect(jsonData.fields[0].name).to.eql('connection_string');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"{{INTEGRATION_EVENT_HUB}}\",\r\n    \"name\":\"Evenhubs integration_{{$guid}}\",\r\n    \"details\":{\r\n        \"connection_string\":\"Endpoint=sb://ydx-dev01-data-ingestion-sea-evh.servicebus.windows.net/;SharedAccessKeyName=Root;SharedAccessKey=oZwvgzsQuuvz2MsaEAW/k23112314L0Kk3PsSXP+DgfDO6hSU=;EntityPath=ingestion-dev-integration\",\r\n        \"event_hub_name\":\"ingestion-dev-integration\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Integration Delete",
+			"item": [
+				{
+					"name": "Delete Integration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Delete Integration`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.has.property('isSuccess').equal(true)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"integrations\":[\r\n        {\"id\":\"{{integration_id}}\"},\r\n        {\"id\":\"{{integration_id_2}}\"},\r\n        {\"id\":\"{{integration_id_3}}\"},\r\n         {\"id\":\"{{integration_id_4}}\"}\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Archive/Retrieve Brokers",
+			"item": [
+				{
+					"name": "Archive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Archive Brokers`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length > 0).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const current = new Date();\r",
+									"const archive_date = new Date(new Date().setDate(current.getDate() + 1));\r",
+									"\r",
+									"pm.environment.set('archive_date', archive_date);\r"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"archiveTime\": \"{{archive_date}}\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/brokers/archive",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"archive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve - OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[{\\\"id\\\":\\\"53a3cd1e-b52d-4d84-8afd-28e23c3ca6d2\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"4a4bd2b7-3a7f-45ec-8afe-4d64c05121bd\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"connection_mode\\\\\\\":\\\\\\\"Connection\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_COAP\\\"},{\\\"id\\\":\\\"c89d6f98-286a-4c99-bd45-50d75d7a86f0\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"9f9d2a64-4e47-4e40-9eef-0934b6cbe4e1\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"tier\\\\\\\":\\\\\\\"B1\\\\\\\",\\\\\\\"number_of_hub_units\\\\\\\":2,\\\\\\\"device_to_cloud_partitions\\\\\\\":4,\\\\\\\"defender_for_iot\\\\\\\":false,\\\\\\\"enable_sharing\\\\\\\":true}\\\",\\\"type\\\":\\\"BROKER_IOT_HUB\\\"},{\\\"id\\\":\\\"a783ff30-26a5-409e-a55e-66f1b517114f\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"event_hub_name\\\\\\\":\\\\\\\"hub_name_update\\\\\\\",\\\\\\\"tier\\\\\\\":\\\\\\\"Basic\\\\\\\",\\\\\\\"tierName\\\\\\\":\\\\\\\"Basic\\\\\\\",\\\\\\\"throughput_units\\\\\\\":10,\\\\\\\"max_throughput_units\\\\\\\":50,\\\\\\\"auto_inflate\\\\\\\":true,\\\\\\\"sasTokenDuration\\\\\\\":60}\\\",\\\"type\\\":\\\"BROKER_EVENT_HUB\\\"}]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/brokers/retrieve",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"retrieve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve - Failed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[{\\\"id\\\":\\\"53a3cd1e-b52d-4d84-8afd-28e23c3ca6d2\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"4a4bd2b7-3a7f-45ec-8afe-4d64c05121bd\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"connection_mode\\\\\\\":\\\\\\\"Connection\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_COAP\\\"},{\\\"id\\\":\\\"c89d6f98-286a-4c99-bd45-50d75d7a86f0\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"9f9d2a64-4e47-4e40-9eef-0934b6cbe4e1\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"number_of_hub_units\\\\\\\":2,\\\\\\\"device_to_cloud_partitions\\\\\\\":4,\\\\\\\"defender_for_iot\\\\\\\":false,\\\\\\\"enable_sharing\\\\\\\":true}\\\",\\\"type\\\":\\\"BROKER_IOT_HUB\\\"},{\\\"id\\\":\\\"a783ff30-26a5-409e-a55e-66f1b517114f\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"event_hub_name\\\\\\\":\\\\\\\"hub_name_update\\\\\\\",\\\\\\\"tier\\\\\\\":\\\\\\\"BRKTIER\\\\\\\",\\\\\\\"throughput_units\\\\\\\":10,\\\\\\\"max_throughput_units\\\\\\\":50,\\\\\\\"auto_inflate\\\\\\\":true}\\\",\\\"type\\\":\\\"BROKER_EVENT_HUB\\\"}]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/brokers/retrieve",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"retrieve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify - OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Archive Brokers`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSuccess).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[{\\\"id\\\":\\\"53a3cd1e-b52d-4d84-8afd-28e23c3ca6d2\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"4a4bd2b7-3a7f-45ec-8afe-4d64c05121bd\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"connection_mode\\\\\\\":\\\\\\\"Connection\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_COAP\\\"},{\\\"id\\\":\\\"c89d6f98-286a-4c99-bd45-50d75d7a86f0\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"9f9d2a64-4e47-4e40-9eef-0934b6cbe4e1\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"tier\\\\\\\":\\\\\\\"B1\\\\\\\",\\\\\\\"tierName\\\\\\\":\\\\\\\"B1\\\\\\\",\\\\\\\"number_of_hub_units\\\\\\\":2,\\\\\\\"device_to_cloud_partitions\\\\\\\":4,\\\\\\\"defender_for_iot\\\\\\\":false,\\\\\\\"enable_sharing\\\\\\\":true}\\\",\\\"type\\\":\\\"BROKER_IOT_HUB\\\"},{\\\"id\\\":\\\"a783ff30-26a5-409e-a55e-66f1b517114f\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"event_hub_name\\\\\\\":\\\\\\\"hub_name_update\\\\\\\",\\\\\\\"tier\\\\\\\":\\\\\\\"Basic\\\\\\\",\\\\\\\"tierName\\\\\\\":\\\\\\\"Basic\\\\\\\",\\\\\\\"throughput_units\\\\\\\":10,\\\\\\\"max_throughput_units\\\\\\\":50,\\\\\\\"auto_inflate\\\\\\\":true,\\\\\\\"sasTokenDuration\\\\\\\":60}\\\",\\\"type\\\":\\\"BROKER_EVENT_HUB\\\"}]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/brokers/archive/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"archive",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify - Failed Name Empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[{\\\"id\\\":\\\"53a3cd1e-b52d-4d84-8afd-28e23c3ca6d2\\\",\\\"name\\\":\\\"\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"4a4bd2b7-3a7f-45ec-8afe-4d64c05121bd\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"connection_mode\\\\\\\":\\\\\\\"Connection\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_COAP\\\"},{\\\"id\\\":\\\"c89d6f98-286a-4c99-bd45-50d75d7a86f0\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"9f9d2a64-4e47-4e40-9eef-0934b6cbe4e1\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"tier\\\\\\\":\\\\\\\"B1\\\\\\\",\\\\\\\"number_of_hub_units\\\\\\\":2,\\\\\\\"device_to_cloud_partitions\\\\\\\":4,\\\\\\\"defender_for_iot\\\\\\\":false,\\\\\\\"enable_sharing\\\\\\\":true}\\\",\\\"type\\\":\\\"BROKER_IOT_HUB\\\"},{\\\"id\\\":\\\"a783ff30-26a5-409e-a55e-66f1b517114f\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"event_hub_name\\\\\\\":\\\\\\\"hub_name_update\\\\\\\",\\\\\\\"tier\\\\\\\":\\\\\\\"BRKTIER\\\\\\\",\\\\\\\"throughput_units\\\\\\\":10,\\\\\\\"max_throughput_units\\\\\\\":50,\\\\\\\"auto_inflate\\\\\\\":true,\\\\\\\"sasTokenDuration\\\\\\\":60}\\\",\\\"type\\\":\\\"BROKER_EVENT_HUB\\\"}]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/brokers/archive/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"archive",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify - Failed Type Empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[{\\\"id\\\":\\\"53a3cd1e-b52d-4d84-8afd-28e23c3ca6d2\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"\\\"},{\\\"id\\\":\\\"4a4bd2b7-3a7f-45ec-8afe-4d64c05121bd\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"connection_mode\\\\\\\":\\\\\\\"Connection\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_COAP\\\"},{\\\"id\\\":\\\"c89d6f98-286a-4c99-bd45-50d75d7a86f0\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"9f9d2a64-4e47-4e40-9eef-0934b6cbe4e1\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"tier\\\\\\\":\\\\\\\"B1\\\\\\\",\\\\\\\"number_of_hub_units\\\\\\\":2,\\\\\\\"device_to_cloud_partitions\\\\\\\":4,\\\\\\\"defender_for_iot\\\\\\\":false,\\\\\\\"enable_sharing\\\\\\\":true}\\\",\\\"type\\\":\\\"BROKER_IOT_HUB\\\"},{\\\"id\\\":\\\"a783ff30-26a5-409e-a55e-66f1b517114f\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"event_hub_name\\\\\\\":\\\\\\\"hub_name_update\\\\\\\",\\\\\\\"tier\\\\\\\":\\\\\\\"BRKTIER\\\\\\\",\\\\\\\"throughput_units\\\\\\\":10,\\\\\\\"max_throughput_units\\\\\\\":50,\\\\\\\"auto_inflate\\\\\\\":true,\\\\\\\"sasTokenDuration\\\\\\\":60}\\\",\\\"type\\\":\\\"BROKER_EVENT_HUB\\\"}]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/brokers/archive/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"archive",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify - Failed Content Empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[{\\\"id\\\":\\\"53a3cd1e-b52d-4d84-8afd-28e23c3ca6d2\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"4a4bd2b7-3a7f-45ec-8afe-4d64c05121bd\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"connection_mode\\\\\\\":\\\\\\\"Connection\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_COAP\\\"},{\\\"id\\\":\\\"c89d6f98-286a-4c99-bd45-50d75d7a86f0\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"9f9d2a64-4e47-4e40-9eef-0934b6cbe4e1\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"tier\\\\\\\":\\\\\\\"B1\\\\\\\",\\\\\\\"number_of_hub_units\\\\\\\":2,\\\\\\\"device_to_cloud_partitions\\\\\\\":4,\\\\\\\"defender_for_iot\\\\\\\":false,\\\\\\\"enable_sharing\\\\\\\":true}\\\",\\\"type\\\":\\\"BROKER_IOT_HUB\\\"},{\\\"id\\\":\\\"a783ff30-26a5-409e-a55e-66f1b517114f\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"event_hub_name\\\\\\\":\\\\\\\"hub_name_update\\\\\\\",\\\\\\\"tier\\\\\\\":\\\\\\\"BRKTIER\\\\\\\",\\\\\\\"throughput_units\\\\\\\":10,\\\\\\\"max_throughput_units\\\\\\\":50,\\\\\\\"auto_inflate\\\\\\\":true,\\\\\\\"sasTokenDuration\\\\\\\":60}\\\",\\\"type\\\":\\\"BROKER_EVENT_HUB\\\"}]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/brokers/archive/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"archive",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify - Failed Content Not Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[{\\\"id\\\":\\\"53a3cd1e-b52d-4d84-8afd-28e23c3ca6d2\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"porsssst\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"4a4bd2b7-3a7f-45ec-8afe-4d64c05121bd\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"connection_mode\\\\\\\":\\\\\\\"Connection\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_COAP\\\"},{\\\"id\\\":\\\"c89d6f98-286a-4c99-bd45-50d75d7a86f0\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"port\\\\\\\":\\\\\\\"1883\\\\\\\",\\\\\\\"authentication_type\\\\\\\":\\\\\\\"Simple\\\\\\\"}\\\",\\\"type\\\":\\\"BROKER_EMQX_MQTT\\\"},{\\\"id\\\":\\\"9f9d2a64-4e47-4e40-9eef-0934b6cbe4e1\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"tier\\\\\\\":\\\\\\\"B1\\\\\\\",\\\\\\\"number_of_hub_units\\\\\\\":2,\\\\\\\"device_to_cloud_partitions\\\\\\\":4,\\\\\\\"defender_for_iot\\\\\\\":false,\\\\\\\"enable_sharing\\\\\\\":true}\\\",\\\"type\\\":\\\"BROKER_IOT_HUB\\\"},{\\\"id\\\":\\\"a783ff30-26a5-409e-a55e-66f1b517114f\\\",\\\"name\\\":\\\"{{$guid}}\\\",\\\"content\\\":\\\"{\\\\\\\"event_hub_name\\\\\\\":\\\\\\\"hub_name_update\\\\\\\",\\\\\\\"tier\\\\\\\":\\\\\\\"BRKTIER\\\\\\\",\\\\\\\"throughput_units\\\\\\\":10,\\\\\\\"max_throughput_units\\\\\\\":50,\\\\\\\"auto_inflate\\\\\\\":true,\\\\\\\"sasTokenDuration\\\\\\\":60}\\\",\\\"type\\\":\\\"BROKER_EVENT_HUB\\\"}]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/brokers/archive/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"archive",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Archive/Retrieve Integrations",
+			"item": [
+				{
+					"name": "Archive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Archive Brokers`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length > 0).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const current = new Date();\r",
+									"const archive_date = new Date(new Date().setDate(current.getDate() + 1));\r",
+									"\r",
+									"pm.environment.set('archive_date', archive_date);\r"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"archiveTime\": \"{{archive_date}}\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/archive",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"archive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve - OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[    {        \\\"id\\\": \\\"fad8b8db-a259-45c7-5df3-08db365203f9\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"e405557d-42ce-4c36-79d2-08daea4811a6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"c10ec0e7-45ee-4d55-3027-08daab44fae6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"50a98be4-a55d-48ee-42d8-08da7519adcd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"aHR0cHM6Ly8xLmNvbQ==\\\\\\\",\\\\\\\"client_id\\\\\\\":\\\\\\\"MQ==\\\\\\\",\\\\\\\"client_secret\\\\\\\":\\\\\\\"MQ==\\\\\\\"}\\\",        \\\"type\\\": \\\"GREEN_KONCEPT_API\\\"    },    {        \\\"id\\\": \\\"3b5fb4a4-e3f3-4b67-e3af-08da6f9b2bdb\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"74daef91-351e-44f4-9dba-08da6ed3c1bd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    }]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/retrieve",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"retrieve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve - Failed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[    {        \\\"id\\\": \\\"fad8b8db-a259-45c7-5df3-08db365203f9\\\",        \\\"name\\\": \\\"\\\",        \\\"content\\\": \\\"\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"e405557d-42ce-4c36-79d2-08daea4811a6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"c10ec0e7-45ee-4d55-3027-08daab44fae6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"50a98be4-a55d-48ee-42d8-08da7519adcd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"aHR0cHM6Ly8xLmNvbQ==\\\\\\\",\\\\\\\"client_id\\\\\\\":\\\\\\\"MQ==\\\\\\\",\\\\\\\"client_secret\\\\\\\":\\\\\\\"MQ==\\\\\\\"}\\\",        \\\"type\\\": \\\"GREEN_KONCEPT_API\\\"    },    {        \\\"id\\\": \\\"3b5fb4a4-e3f3-4b67-e3af-08da6f9b2bdb\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"74daef91-351e-44f4-9dba-08da6ed3c1bd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    }]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/retrieve",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"retrieve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify - OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(`Archive Brokers`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSuccess).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[    {        \\\"id\\\": \\\"fad8b8db-a259-45c7-5df3-08db365203f9\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"e405557d-42ce-4c36-79d2-08daea4811a6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"c10ec0e7-45ee-4d55-3027-08daab44fae6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"50a98be4-a55d-48ee-42d8-08da7519adcd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"aHR0cHM6Ly8xLmNvbQ==\\\\\\\",\\\\\\\"client_id\\\\\\\":\\\\\\\"MQ==\\\\\\\",\\\\\\\"client_secret\\\\\\\":\\\\\\\"MQ==\\\\\\\"}\\\",        \\\"type\\\": \\\"GREEN_KONCEPT_API\\\"    },    {        \\\"id\\\": \\\"3b5fb4a4-e3f3-4b67-e3af-08da6f9b2bdb\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"74daef91-351e-44f4-9dba-08da6ed3c1bd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    }]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/archive/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"archive",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify - Failed Name Empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[    {        \\\"id\\\": \\\"fad8b8db-a259-45c7-5df3-08db365203f9\\\",        \\\"name\\\": \\\"\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"e405557d-42ce-4c36-79d2-08daea4811a6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"c10ec0e7-45ee-4d55-3027-08daab44fae6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"50a98be4-a55d-48ee-42d8-08da7519adcd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"aHR0cHM6Ly8xLmNvbQ==\\\\\\\",\\\\\\\"client_id\\\\\\\":\\\\\\\"MQ==\\\\\\\",\\\\\\\"client_secret\\\\\\\":\\\\\\\"MQ==\\\\\\\"}\\\",        \\\"type\\\": \\\"GREEN_KONCEPT_API\\\"    },    {        \\\"id\\\": \\\"3b5fb4a4-e3f3-4b67-e3af-08da6f9b2bdb\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"74daef91-351e-44f4-9dba-08da6ed3c1bd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    }]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/archive/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"archive",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify - Failed Type Empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[    {        \\\"id\\\": \\\"fad8b8db-a259-45c7-5df3-08db365203f9\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"\\\"    },    {        \\\"id\\\": \\\"e405557d-42ce-4c36-79d2-08daea4811a6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"c10ec0e7-45ee-4d55-3027-08daab44fae6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"50a98be4-a55d-48ee-42d8-08da7519adcd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"aHR0cHM6Ly8xLmNvbQ==\\\\\\\",\\\\\\\"client_id\\\\\\\":\\\\\\\"MQ==\\\\\\\",\\\\\\\"client_secret\\\\\\\":\\\\\\\"MQ==\\\\\\\"}\\\",        \\\"type\\\": \\\"GREEN_KONCEPT_API\\\"    },    {        \\\"id\\\": \\\"3b5fb4a4-e3f3-4b67-e3af-08da6f9b2bdb\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"74daef91-351e-44f4-9dba-08da6ed3c1bd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    }]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/archive/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"archive",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify - Failed Content Empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[    {        \\\"id\\\": \\\"fad8b8db-a259-45c7-5df3-08db365203f9\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"e405557d-42ce-4c36-79d2-08daea4811a6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"c10ec0e7-45ee-4d55-3027-08daab44fae6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"50a98be4-a55d-48ee-42d8-08da7519adcd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"aHR0cHM6Ly8xLmNvbQ==\\\\\\\",\\\\\\\"client_id\\\\\\\":\\\\\\\"MQ==\\\\\\\",\\\\\\\"client_secret\\\\\\\":\\\\\\\"MQ==\\\\\\\"}\\\",        \\\"type\\\": \\\"GREEN_KONCEPT_API\\\"    },    {        \\\"id\\\": \\\"3b5fb4a4-e3f3-4b67-e3af-08da6f9b2bdb\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"74daef91-351e-44f4-9dba-08da6ed3c1bd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    }]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/archive/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"archive",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify - Failed Content Not Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"[    {        \\\"id\\\": \\\"fad8b8db-a259-45c7-5df3-08db365203f9\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"apczxczxci_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"e405557d-42ce-4c36-79d2-08daea4811a6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"c10ec0e7-45ee-4d55-3027-08daab44fae6\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MTIz\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"50a98be4-a55d-48ee-42d8-08da7519adcd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"aHR0cHM6Ly8xLmNvbQ==\\\\\\\",\\\\\\\"client_id\\\\\\\":\\\\\\\"MQ==\\\\\\\",\\\\\\\"client_secret\\\\\\\":\\\\\\\"MQ==\\\\\\\"}\\\",        \\\"type\\\": \\\"GREEN_KONCEPT_API\\\"    },    {        \\\"id\\\": \\\"3b5fb4a4-e3f3-4b67-e3af-08da6f9b2bdb\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    },    {        \\\"id\\\": \\\"74daef91-351e-44f4-9dba-08da6ed3c1bd\\\",        \\\"name\\\": \\\"{{$guid}}\\\",        \\\"content\\\": \\\"{\\\\\\\"endpoint\\\\\\\":\\\\\\\"https://dxpeng.msa2.apps.yokogawa.build\\\\\\\",\\\\\\\"api_key\\\\\\\":\\\\\\\"OWM1N2ZkYjUyNTU1NDYyZjk5Y2E1Njgw\\\\\\\",\\\\\\\"api_secret\\\\\\\":\\\\\\\"MFNseDNKVHFVRXE5VnFHOHJ6VysxS0xFdXhsMjgzUDk=\\\\\\\",\\\\\\\"pooling_interval\\\\\\\":\\\\\\\"80\\\\\\\",\\\\\\\"broker_endpoint\\\\\\\":\\\\\\\"https://broker.msa2.apps.yokogawa.build\\\\\\\"}\\\",        \\\"type\\\": \\\"WAYLAY_API\\\"    }]\"     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/archive/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"archive",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fetch Entity",
+			"item": [
+				{
+					"name": "Search Broker To Fetch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Fetch response has data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"data\").to.be.an(\"array\").to.not.empty;\r",
+									"    const data_0 = jsonData.data[0];\r",
+									"    pm.expect(data_0).to.have.property(\"id\");\r",
+									"    pm.environment.set(\"fetch_broker_id\", data_0.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/brokers/search",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Broker By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Fetch response has data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"id\", pm.environment.get(\"fetch_broker_id\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/brokers/{{fetch_broker_id}}/fetch",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"{{fetch_broker_id}}",
+								"fetch"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail Fetch Broker By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/brokers/{{$guid}}/fetch",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"brokers",
+								"{{$guid}}",
+								"fetch"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Integration To Fetch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Fetch response has data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"data\").to.be.an(\"array\").to.not.empty;\r",
+									"    const data_0 = jsonData.data[0];\r",
+									"    pm.expect(data_0).to.have.property(\"id\");\r",
+									"    pm.environment.set(\"fetch_integration_id\", data_0.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/bkr/integrations/search",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Integration By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Fetch response has data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"id\", pm.environment.get(\"fetch_integration_id\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{fetch_integration_id}}/fetch/common",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{fetch_integration_id}}",
+								"fetch",
+								"common"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail Fetch Integration By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The request has status code 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bkr/integrations/{{$guid}}/fetch/common",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bkr",
+								"integrations",
+								"{{$guid}}",
+								"fetch",
+								"common"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

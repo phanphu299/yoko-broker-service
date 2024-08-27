@@ -1,0 +1,5 @@
+is_global = true
+build_property.RootNamespace = Broker.Domain
+build_property.ProjectDir = /Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

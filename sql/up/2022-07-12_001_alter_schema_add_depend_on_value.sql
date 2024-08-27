@@ -1,0 +1,1 @@
+alter table schema_details add depend_on_key nvarchar(50);

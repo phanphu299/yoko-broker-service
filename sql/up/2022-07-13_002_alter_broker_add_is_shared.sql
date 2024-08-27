@@ -1,0 +1,1 @@
+alter table brokers add [is_shared] bit not null default 0;

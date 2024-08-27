@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Cake.Tool</id>
+    <version>4.0.0</version>
+    <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio, C. Augusto Proiete, Nils Andresen, and contributors</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>cake-medium.png</icon>
+    <readme>NuGet.org.md</readme>
+    <projectUrl>https://cakebuild.net/</projectUrl>
+    <description>The Cake .NET Tool.</description>
+    <releaseNotes>4266 Update LatestPotentialBreakingChange to 4.0.0.
+4132 Add File APIs for setting timestamps (creation time, last write time, last access time).
+4250 Update System.Collections.Immutable to 8.0.0.
+4260 Unzip alias should support overwrite files.
+4251 Update System.Reflection.Metadata 8.0.0.
+4249 Update Microsoft.Extensions.DependencyInjection to 8.0.0.
+4197 Execution of Cake script fails if an addin defines an alias that uses nullable reference types in its signature.
+4150 Cake script is contributing unactionable diagnostics in VS Code Problems pane.</releaseNotes>
+    <copyright>Copyright (c) .NET Foundation and contributors</copyright>
+    <tags>Cake Script Build</tags>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+    <repository type="git" url="https://github.com/cake-build/cake" commit="59295141a6a04620e6e41e05ffcda0225e83986b" />
+  </metadata>
+</package>

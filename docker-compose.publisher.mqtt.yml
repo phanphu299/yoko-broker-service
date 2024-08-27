@@ -1,0 +1,26 @@
+services:
+  device-simulator-emqx-1:
+    image: docker.local/device-simulator-emqx:latest
+    build:
+      context: .
+      dockerfile: listeners/_docker/Dockerfile-simulate-device-emqx
+    deploy:
+      replicas: 1
+      # resources:
+      #   limits:
+      #     cpus: "1"
+      #     memory: "500M"
+    restart: on-failure
+    environment:
+      ProjectId: "34e5ee62-429c-4724-b3d0-3891bd0a08c9"
+      DeviceId: "08d33d62-abfc-48e9-b308-a1f0822965eb"
+      UsingMqtt: true
+      SendMessage: true
+      UseLargePayload: true
+      DelayInMilliseconds: 100
+      NumberOfConnections: 200
+      ConnectionString: "Server=host.docker.internal;Username=broker-listener;Password=3jj4PA7AbJURtnrRVkMbgLEaeE82HV"
+      Coap__TelemetryTopic: "{projectId}/devices/{deviceId}/telemetry"
+      Coap__CommandTopic: "$ahi/commands"
+      Mqtt__TelemetryTopic: "{projectId}/devices/{deviceId}/telemetry"
+      Mqtt__CommandTopic: "$ahi/commands"

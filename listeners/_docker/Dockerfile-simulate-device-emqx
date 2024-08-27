@@ -1,0 +1,13 @@
+FROM dxpprivate.azurecr.io/ahi-build:6.0 AS build
+WORKDIR /publisher
+COPY NuGet.Config ./
+COPY ["listeners/simulators/SimulateEMQXDevice/SimulateEMQXDevice.csproj", "SimulateEMQXDevice/"]
+RUN dotnet restore "SimulateEMQXDevice/SimulateEMQXDevice.csproj"
+
+COPY ["listeners/simulators/SimulateEMQXDevice/", "./SimulateEMQXDevice"]
+RUN dotnet publish "SimulateEMQXDevice/SimulateEMQXDevice.csproj" --no-restore -c Release -o /app/publish
+
+FROM dxpprivate.azurecr.io/ahi-runtime:6.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "SimulateEMQXDevice.dll"]

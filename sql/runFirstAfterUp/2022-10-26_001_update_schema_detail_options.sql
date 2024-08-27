@@ -1,0 +1,1 @@
+UPDATE schema_detail_options SET [code]=[id];

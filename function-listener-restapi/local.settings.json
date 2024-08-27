@@ -1,0 +1,32 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "ASPNETCORE_ENVIRONMENT": "Development",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;",
+    "Authentication__Authority": "http://127.0.0.1:8081",
+    "Authentication__Issuer": "idp",
+    "Authentication__ClientId": "postman-sa",
+    "Authentication__ClientSecret": "CU8cEU3yJ4hCEd6QAB",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "44a96f99-1e40-4cfa-b6b2-92b368f5f01c",
+    "AzureServiceBus__Host": "127.0.0.1",
+    "AzureServiceBus__KeyName": "rabbitmq",
+    "AzureServiceBus__SharedAccessKey": "Pass1234!",
+    "KafkaOption__Enabled": false,
+    "KafkaOption__BootstrapServers": "localhost:9092",
+    "KafkaOption__Consumer__AutoOffsetReset": "Earliest",
+    "KafkaOption__Consumer__SessionTimeoutMs": 6000,
+    "KafkaOption__Consumer__AutoCommitInterval": 1000,
+    "KafkaOption__Consumer__BatchSize": 1000,
+    "KafkaOption__Producer__Linger": 100,
+    "KafkaOption__Producer__BatchSize": 2000,
+    "Redis__Host": "127.0.0.1",
+    "Redis__Password": "Pass1234!",
+    "Redis__Database": "1",
+    "Redis__Ssl": "false",
+    "MaxFileSize": "200",
+    "Api__Storage": "http://127.0.0.1:12000",
+    "Api__Device": "http://127.0.0.1:9000",
+    "Function__Device": "http://127.0.0.1:7076"
+  }
+}

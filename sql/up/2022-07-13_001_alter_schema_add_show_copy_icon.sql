@@ -1,0 +1,1 @@
+alter table schema_details add [enable_copy] bit not null default 0;

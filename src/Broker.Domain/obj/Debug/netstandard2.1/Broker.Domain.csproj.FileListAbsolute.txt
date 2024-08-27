@@ -1,0 +1,10 @@
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/bin/Debug/netstandard2.1/Broker.Domain.deps.json
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/bin/Debug/netstandard2.1/Broker.Domain.dll
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/bin/Debug/netstandard2.1/Broker.Domain.pdb
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/obj/Debug/netstandard2.1/Broker.Domain.csproj.AssemblyReference.cache
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/obj/Debug/netstandard2.1/Broker.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/obj/Debug/netstandard2.1/Broker.Domain.AssemblyInfoInputs.cache
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/obj/Debug/netstandard2.1/Broker.Domain.AssemblyInfo.cs
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/obj/Debug/netstandard2.1/Broker.Domain.csproj.CoreCompileInputs.cache
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/obj/Debug/netstandard2.1/Broker.Domain.dll
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Domain/obj/Debug/netstandard2.1/Broker.Domain.pdb

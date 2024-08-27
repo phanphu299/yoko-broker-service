@@ -1,0 +1,15 @@
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/bin/Debug/netstandard2.1/Broker.Persistence.deps.json
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/bin/Debug/netstandard2.1/Broker.Persistence.dll
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/bin/Debug/netstandard2.1/Broker.Persistence.pdb
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/bin/Debug/netstandard2.1/Broker.Application.dll
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/bin/Debug/netstandard2.1/Broker.Domain.dll
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/bin/Debug/netstandard2.1/Broker.Application.pdb
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/bin/Debug/netstandard2.1/Broker.Domain.pdb
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/obj/Debug/netstandard2.1/Broker.Persistence.csproj.AssemblyReference.cache
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/obj/Debug/netstandard2.1/Broker.Persistence.GeneratedMSBuildEditorConfig.editorconfig
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/obj/Debug/netstandard2.1/Broker.Persistence.AssemblyInfoInputs.cache
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/obj/Debug/netstandard2.1/Broker.Persistence.AssemblyInfo.cs
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/obj/Debug/netstandard2.1/Broker.Persistence.csproj.CoreCompileInputs.cache
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/obj/Debug/netstandard2.1/Broker.Persistence.csproj.CopyComplete
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/obj/Debug/netstandard2.1/Broker.Persistence.dll
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Persistence/obj/Debug/netstandard2.1/Broker.Persistence.pdb

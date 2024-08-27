@@ -1,0 +1,7 @@
+{
+  "id": "b4fb15e1-2526-4876-546c-08da3d5edd07",
+  "name": "RestAPI",
+  "typeId": "BROKER_REST_API",
+  "type": "Broker Rest Api",
+  "settings": {}
+}

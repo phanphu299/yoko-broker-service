@@ -1,0 +1,13 @@
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/bin/Debug/netstandard2.1/Broker.Application.deps.json
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/bin/Debug/netstandard2.1/Broker.Application.dll
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/bin/Debug/netstandard2.1/Broker.Application.pdb
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/bin/Debug/netstandard2.1/Broker.Domain.dll
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/bin/Debug/netstandard2.1/Broker.Domain.pdb
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/obj/Debug/netstandard2.1/Broker.Application.csproj.AssemblyReference.cache
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/obj/Debug/netstandard2.1/Broker.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/obj/Debug/netstandard2.1/Broker.Application.AssemblyInfoInputs.cache
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/obj/Debug/netstandard2.1/Broker.Application.AssemblyInfo.cs
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/obj/Debug/netstandard2.1/Broker.Application.csproj.CoreCompileInputs.cache
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/obj/Debug/netstandard2.1/Broker.Application.csproj.CopyComplete
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/obj/Debug/netstandard2.1/Broker.Application.dll
+/Users/phuphan/Yokogawa/Asset Management/broker-service/src/Broker.Application/obj/Debug/netstandard2.1/Broker.Application.pdb

@@ -1,0 +1,249 @@
+services:
+  redis:
+    image: redis:6.2.6-alpine
+    command: redis-server --requirepass Pass1234!
+    deploy:
+      replicas: 1
+      # resources:
+      #   limits:
+      #     cpus: "0.1"
+      #     memory: 50M
+      # restart: on-failure
+    ports:
+      - "6379:6379"
+    networks:
+      - listener
+  postgresdb:
+    image: "timescale/timescaledb-ha:pg14.5-ts2.8.1-p1"
+    hostname: postgresql
+    ports:
+      - "5432:5432"
+    command: postgres -c 'max_connections=250'
+    environment:
+      POSTGRES_PASSWORD: "Pass1234!"
+    volumes:
+      - ./sql/docker/conduktor-console:/docker-entrypoint-initdb.d
+    networks:
+      - listener
+  conduktor-console:
+    image: conduktor/conduktor-console:1.22.0
+    depends_on:
+      - postgresdb
+    ports:
+      - "8080:8080"
+    environment:
+      CDK_DATABASE_URL: "postgresql://postgres:Pass1234!@postgresql:5432/conduktor_console"
+      CDK_ORGANIZATION_NAME: "Yokogawa"
+      CDK_ADMIN_EMAIL: "admin"
+      CDK_ADMIN_PASSWORD: "Pass1234!"
+      CDK_MONITORING_CORTEX-URL: http://conduktor-monitoring:9009/
+      CDK_MONITORING_ALERT-MANAGER-URL: http://conduktor-monitoring:9010/
+      CDK_MONITORING_CALLBACK-URL: http://conduktor-console:8080/monitoring/api/
+      CDK_MONITORING_NOTIFICATIONS-CALLBACK-URL: http://localhost:8080
+    networks:
+      - listener
+  conduktor-monitoring:
+    image: conduktor/conduktor-console-cortex:1.22.0
+    depends_on:
+      - conduktor-console
+    environment:
+      CDK_CONSOLE-URL: "http://conduktor-console:8080"
+    networks:
+      - listener
+  kafka-1:
+    image: apache/kafka:latest
+    hostname: kafka-1
+    container_name: kafka-1
+    ports:
+      - 29092:9092
+    environment:
+      CLUSTER_ID: '4L6g3nShT-eMCtK--X86sw'
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka-1:9093,2@kafka-2:9093'
+      KAFKA_LISTENERS: 'PLAINTEXT://:19092,CONTROLLER://:9093,EXTERNAL://:9092,INTERNAL://:9091'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:19092,EXTERNAL://localhost:29092,INTERNAL://kafka-1:9091
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+    networks:
+      - listener
+  kafka-2:
+    image: apache/kafka:latest
+    hostname: kafka-2
+    container_name: kafka-2
+    ports:
+      - 39092:9092
+    environment:
+      CLUSTER_ID: '4L6g3nShT-eMCtK--X86sw'
+      KAFKA_NODE_ID: 2
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka-1:9093,2@kafka-2:9093'
+      KAFKA_LISTENERS: 'PLAINTEXT://:19092,CONTROLLER://:9093,EXTERNAL://:9092,INTERNAL://:9091'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:19092,EXTERNAL://localhost:39092,INTERNAL://kafka-2:9091
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+    networks:
+      - listener
+  emqx:
+    image: emqx/emqx:5.7.0
+    container_name: emqx
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1000M
+      # restart: on-failure
+    environment:
+      EMQX_DASHBOARD__DEFAULT_USERNAME: "admin"
+      EMQX_DASHBOARD__DEFAULT_PASSWORD: "Pass1234!"
+      # EMQX_LOG__CONSOLE_HANDLER__ENABLE: "true"
+      # EMQX_LOG__CONSOLE_HANDLER__LEVEL: "debug"
+      EMQX_MQTT__MAX_MQUEUE_LEN: 1000000
+      EMQX_MQTT__MAX_INFLIGHT: 128
+      # EMQX_AUTHENTICATION__1__ENABLE: "true"
+      # EMQX_AUTHENTICATION__1__MECHANISM: "password_based"
+      # EMQX_AUTHENTICATION__1__BACKEND: "redis"
+      # EMQX_AUTHENTICATION__1__SERVERS: "redis_server"
+      # EMQX_AUTHENTICATION__1__REDIS_TYPE: "cluster"
+      # EMQX_AUTHENTICATION__1__AUTO_RECONNECT: "true"
+      # EMQX_AUTHENTICATION__1__PASSWORD: "redis_password"
+      # EMQX_AUTHENTICATION__1__PASSWORD_HASH_ALGORITHM__NAME: "plain"
+      # EMQX_AUTHENTICATION__1__PASSWORD_HASH_ALGORITHM__SALT_POSITION: "disable"
+      # EMQX_AUTHENTICATION__1__CMD: "HMGET mqtt_user:${username} password"
+
+      # EMQX_AUTHENTICATION__2__ENABLE: "false"
+      # EMQX_AUTHENTICATION__2__MECHANISM: "jwt"
+      # EMQX_AUTHENTICATION__2__USE_JWKS: "true"
+      # EMQX_AUTHENTICATION__2__FROM: "password"
+      # EMQX_AUTHENTICATION__2__REFRESH_INTERVAL: "300"
+      # EMQX_AUTHENTICATION__2__ENDPOINT: "http://identity-service.ahi.svc/.well-known/openid-configuration/jwks"
+
+      # EMQX_AUTHENTICATION__3__ENABLE: "true"
+      # EMQX_AUTHENTICATION__3__MECHANISM: "password_based"
+      # EMQX_AUTHENTICATION__3__BACKEND: "http"
+      # EMQX_AUTHENTICATION__3__METHOD: "post"
+      # EMQX_AUTHENTICATION__3__URL: "http://broker-function.ahi.svc.cluster.local/fnc/bkr/emqx/auth/check"
+      # EMQX_AUTHENTICATION__3__BODY: '{"password": "${password}", "username": "${username}"}'
+
+      # EMQX_AUTHORIZATION__SOURCES__1__ENABLE: "true"
+      # EMQX_AUTHORIZATION__SOURCES__1__TYPE: "redis"
+      # EMQX_AUTHORIZATION__SOURCES__1__SERVERS: "redis_server"
+      # EMQX_AUTHORIZATION__SOURCES__1__REDIS_TYPE: "cluster"
+      # EMQX_AUTHORIZATION__SOURCES__1__PASSWORD: "redis_password"
+      # EMQX_AUTHORIZATION__SOURCES__1__CMD: "HGETALL mqtt_acl:${username}"
+
+      # EMQX_AUTHORIZATION__SOURCES__2__ENABLE: "true"
+      # EMQX_AUTHORIZATION__SOURCES__2__TYPE: "http"
+      # EMQX_AUTHORIZATION__SOURCES__2__METHOD: "post"
+      # EMQX_AUTHORIZATION__SOURCES__2__URL: "http://broker-function.ahi.svc.cluster.local/fnc/bkr/emqx/acl/check"
+      # EMQX_AUTHORIZATION__SOURCES__2__BODY: '{"action":"${action}", "topic": "${topic}", "username": "${username}"}'
+      # EMQX_GATEWAY__COAP__MOUNTPOINT: "coap/"
+      EMQX_GATEWAY__COAP__CONNECTION_REQUIRED: "true"
+      EMQX_GATEWAY__COAP__ENABLE_STATS: "true"
+      EMQX_GATEWAY__COAP__AUTHENTICATION__ENABLE: "true"
+      EMQX_GATEWAY__COAP__AUTHENTICATION__MECHANISM: "password_based"
+      EMQX_GATEWAY__COAP__AUTHENTICATION__BACKEND: "http"
+      EMQX_GATEWAY__COAP__AUTHENTICATION__METHOD: "post"
+      EMQX_GATEWAY__COAP__AUTHENTICATION__URL: "http://listener-auth/auth/emqx/auth/check"
+      EMQX_GATEWAY__COAP__AUTHENTICATION__BODY: '{"password": "$${password}", "username": "$${username}"}'
+      # EMQX_GATEWAY__COAP__AUTHENTICATION__VERIFY_CLAIMS: '{"clientid": "$${clientid}"}'
+      EMQX_GATEWAY__COAP__LISTENERS__UDP__MYCUSTOM__BIND: "5683"
+      EMQX_GATEWAY__COAP__LISTENERS__UDP__MYCUSTOM__MAX_CONNECTIONS: "1000000"
+      EMQX_GATEWAY__COAP__LISTENERS__UDP__MYCUSTOM__MAX_CONN_RATE: "1000"
+      EMQX_GATEWAY__COAP__LISTENERS__UDP__MYCUSTOM__UDP_OPTIONS__BUFFER: "2048"
+      EMQX_GATEWAY__COAP__LISTENERS__UDP__MYCUSTOM__UDP_OPTIONS__SNDBUF: "2048"
+      EMQX_GATEWAY__COAP__LISTENERS__UDP__MYCUSTOM__UDP_OPTIONS__RECBUF: "256kb"
+      # - "EMQX_NODE_NAME=emqx@node1.emqx.io"
+      # - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
+      # - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
+    healthcheck:
+      test: [ "CMD", "/opt/emqx/bin/emqx_ctl", "status" ]
+      interval: 5s
+      timeout: 25s
+      retries: 5
+    ports:
+      - "1883:1883"
+      - "8083:8083"
+      - "8883:8883"
+      - "8084:8084"
+      - "18083:18083"
+      - "5683:5683/udp"
+    # depends_on:
+    #   - listener-auth
+    # volumes:
+    #   - "./emqx/emqx.conf:/opt/emqx/etc/emqx.conf"
+    networks:
+      - listener
+  mqttx-web:
+    image: emqx/mqttx-web:latest
+    container_name: mqttx-web
+    networks:
+      - listener
+    ports:
+      - 1881:80
+  emqtt-bench:
+    image: docker.local/custom-emqtt-bench:latest
+    build:
+      context: .
+      dockerfile: listeners/_docker/Dockerfile-mqtt-bench
+    networks:
+      - listener
+    stdin_open: true
+    tty: true
+    environment:
+      - HOST=emqx
+  broker-listener-mqtt:
+    image: docker.local/broker-listener-mqtt
+    build:
+      context: .
+      dockerfile: listeners/_docker/Dockerfile-listener-mqtt
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: "500M"
+    # restart: on-failure
+    environment:
+      Logging__LogLevel__Default: Debug
+      APPINSIGHTS_INSTRUMENTATIONKEY: 44a96f99-1e40-4cfa-b6b2-92b368f5f01c
+      ProjectInfo: 0779433e-f36b-1410-8650-00f91313348c_0e79433e-f36b-1410-8650-00f91313348c_34e5ee62-429c-4724-b3d0-3891bd0a08c9
+      Mqtt__TcpServer: emqx
+      Mqtt__CleanSession: false
+      Mqtt__SessionExpiryInterval: 3600
+      Mqtt__ReconnectDelaySecs: 15
+      Mqtt__Topic: $$share/ahi/+/devices/+/telemetry
+      Mqtt__Qos: 1
+      Mqtt__UserName: broker-listener
+      Mqtt__Password: Fe5XPfrJdD5qAZY5JTPWJP8Jr8GXMEFx
+      Mqtt__NumberOfConnections: 20
+      Concurrency__InitialConcurrencyLimit: 3
+      Concurrency__ScaleFactor: 30
+      Concurrency__ScaleCheckInterval: 5000
+      Redis__Host: "redis"
+      Redis__Password: "Pass1234!"
+      Redis__Database: "1"
+      Redis__Ssl: "false"
+      Kafka__BootstrapServers: "kafka-1:9091"
+      Kafka__LingerMs: 100
+      Kafka__BatchSize: 1000
+    depends_on:
+      - redis
+      - kafka-1
+      - emqx
+    networks:
+      - listener
+networks:
+  listener:

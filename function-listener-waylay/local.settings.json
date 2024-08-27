@@ -1,0 +1,27 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "ASPNETCORE_ENVIRONMENT": "Development",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;",
+    "Authentication__Authority": "http://127.0.0.1:8081",
+    "Authentication__ClientId": "postman-sa",
+    "Authentication__ClientSecret": "CU8cEU3yJ4hCEd6QAB",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "44a96f99-1e40-4cfa-b6b2-92b368f5f01c",
+    "TenantId": "",
+    "SubscriptionId": "",
+    "ProjectId": "",
+    "IntegrationId": "",
+    "AzureServiceBus__Host": "127.0.0.1",
+    "AzureServiceBus__KeyName": "rabbitmq",
+    "AzureServiceBus__SharedAccessKey": "Pass1234!",
+    "Waylay__Endpoint": "https://broker.msa2.apps.yokogawa.build",
+    "Waylay__TokenType": "Basic",
+    "Waylay__Token": "Pass1234!",
+    "Redis__Host": "127.0.0.1",
+    "Redis__Password": "Pass1234!",
+    "Redis__Database": "1",
+    "Redis__Ssl": "false",
+    "Api__Device": "http://localhost:19000"
+  }
+}

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AHI.Infrastructure.Cache.Redis" Version="2.1.5-rc39" />
+    <PackageReference Include="Azure.Messaging.EventHubs" Version="5.9.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.5" />
+    <PackageReference Include="AHI.Infrastructure.AzureMqttTriggerExtension" Version="3.0.0-refactor" />
+    <PackageReference Include="AHI.Infrastructure.Bus.Kafka" Version="2.1.5-rc58" />
+    <PackageReference Include="AHI.Infrastructure.Bus.RabbitMQ" Version="2.1.5-rc58" />
+    <PackageReference Include="AHI.Infrastructure.OpenTelemetry" Version="2.1.5-rc39" />
+    <PackageReference Include="AHI.Infrastructure.Service" Version="2.1.5-rc39" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="host.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+</Project>

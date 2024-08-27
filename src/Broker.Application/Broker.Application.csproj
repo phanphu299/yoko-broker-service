@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+ <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Broker.Domain\Broker.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Azure.Messaging.EventHubs" Version="5.9.0" />
+    <PackageReference Include="Azure.Messaging.EventHubs.Processor" Version="5.9.0" />
+    <PackageReference Include="prometheus-net" Version="6.0.0" />
+    <PackageReference Include="Hashids.net" Version="1.7.0" />
+    <PackageReference Include="AHI.Infrastructure.Service" Version="2.1.5-rc54" />
+    <PackageReference Include="AHI.Infrastructure.Validation" Version="2.1.5-rc54" />
+    <PackageReference Include="AHI.Infrastructure.Audit" Version="2.1.5-rc54" />
+    <PackageReference Include="AHI.Infrastructure.Security" Version="2.1.5-rc54" />
+    <PackageReference Include="AHI.Infrastructure.Bus.RabbitMQ" Version="2.1.5-rc54" />
+    <PackageReference Include="AHI.Infrastructure.Service.Tag" Version="2.1.5-rc54" />
+  </ItemGroup>
+
+</Project>

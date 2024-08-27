@@ -1,0 +1,1 @@
+alter table integrations add is_processing bit not null default 0;

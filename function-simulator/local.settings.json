@@ -1,0 +1,19 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "ASPNETCORE_ENVIRONMENT": "Development",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;",
+    "Authentication__Authority": "http://127.0.0.1:8081",
+    "Authentication__ClientId": "D28710F2-F142-4CBD-A4E9-9D0A09B9ECF5",
+    "Authentication__ClientSecret": "D34BtxpaKSkfcKYCvxLbgKTdV8FUfRTHGPrKLawL",
+    "Redis__Host": "redis",
+    "Redis__Ssl": "false",
+    "Redis__Password": "Pass1234!",
+    "Redis__Database": "1",
+    "Api__Broker": "http://127.0.0.1:14000",
+    "Api__Device": "http://127.0.0.1:11000",
+    "Function__Master": "http://127.0.0.1:7072",
+    "AuthorizationCode": "localhost"
+  }
+}

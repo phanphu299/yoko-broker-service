@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "listeners", "listeners", "{B4280F8E-8F05-4A5D-92DD-484B74084A0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS", "listeners\FLS\FLS.csproj", "{294C92D2-DDB5-4D50-81AF-41F42BA7ECF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Broker.Listener.Shared", "listeners\Broker.Listener.Shared\Broker.Listener.Shared.csproj", "{D53CF51D-659E-4CC9-B3AD-6DBC8919F625}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Broker.Listener.Coap", "listeners\Broker.Listener.Coap\Broker.Listener.Coap.csproj", "{7C6E9833-3107-4BF0-A818-D63E37D87472}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Broker.Listener.Mqtt", "listeners\Broker.Listener.Mqtt\Broker.Listener.Mqtt.csproj", "{E328CA4C-F1FD-4C52-BA0D-346F78025874}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "simulators", "simulators", "{1011E103-4E72-4BC4-A5EE-433C2395598B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulateEMQXDevice", "listeners\simulators\SimulateEMQXDevice\SimulateEMQXDevice.csproj", "{C2FB2608-27F2-4C74-96D1-6FA990911348}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{294C92D2-DDB5-4D50-81AF-41F42BA7ECF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{294C92D2-DDB5-4D50-81AF-41F42BA7ECF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{294C92D2-DDB5-4D50-81AF-41F42BA7ECF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{294C92D2-DDB5-4D50-81AF-41F42BA7ECF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D53CF51D-659E-4CC9-B3AD-6DBC8919F625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D53CF51D-659E-4CC9-B3AD-6DBC8919F625}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D53CF51D-659E-4CC9-B3AD-6DBC8919F625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D53CF51D-659E-4CC9-B3AD-6DBC8919F625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C6E9833-3107-4BF0-A818-D63E37D87472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C6E9833-3107-4BF0-A818-D63E37D87472}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C6E9833-3107-4BF0-A818-D63E37D87472}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C6E9833-3107-4BF0-A818-D63E37D87472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E328CA4C-F1FD-4C52-BA0D-346F78025874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E328CA4C-F1FD-4C52-BA0D-346F78025874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E328CA4C-F1FD-4C52-BA0D-346F78025874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E328CA4C-F1FD-4C52-BA0D-346F78025874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2FB2608-27F2-4C74-96D1-6FA990911348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2FB2608-27F2-4C74-96D1-6FA990911348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2FB2608-27F2-4C74-96D1-6FA990911348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2FB2608-27F2-4C74-96D1-6FA990911348}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{294C92D2-DDB5-4D50-81AF-41F42BA7ECF8} = {B4280F8E-8F05-4A5D-92DD-484B74084A0E}
+		{D53CF51D-659E-4CC9-B3AD-6DBC8919F625} = {B4280F8E-8F05-4A5D-92DD-484B74084A0E}
+		{7C6E9833-3107-4BF0-A818-D63E37D87472} = {B4280F8E-8F05-4A5D-92DD-484B74084A0E}
+		{E328CA4C-F1FD-4C52-BA0D-346F78025874} = {B4280F8E-8F05-4A5D-92DD-484B74084A0E}
+		{1011E103-4E72-4BC4-A5EE-433C2395598B} = {B4280F8E-8F05-4A5D-92DD-484B74084A0E}
+		{C2FB2608-27F2-4C74-96D1-6FA990911348} = {1011E103-4E72-4BC4-A5EE-433C2395598B}
+	EndGlobalSection
+EndGlobal

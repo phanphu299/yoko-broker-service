@@ -1,0 +1,18 @@
+# build image
+FROM sitprivate.azurecr.io/ahi-build:6.0 AS build
+WORKDIR /listeners
+COPY NuGet.Config ./
+COPY ["listeners/FLS/FLS.csproj", "FLS/"]
+COPY ["listeners/Broker.Listener.Shared/Broker.Listener.Shared.csproj", "Broker.Listener.Shared/"]
+COPY ["listeners/Broker.Listener.Mqtt/Broker.Listener.Mqtt.csproj", "Broker.Listener.Mqtt/"]
+RUN dotnet restore "Broker.Listener.Mqtt/Broker.Listener.Mqtt.csproj" /property:Configuration=Release -nowarn:msb3202,nu1503
+
+COPY ["listeners/FLS/", "./FLS"]
+COPY ["listeners/Broker.Listener.Shared/", "./Broker.Listener.Shared"]
+COPY ["listeners/Broker.Listener.Mqtt/", "./Broker.Listener.Mqtt"]
+RUN dotnet publish ./Broker.Listener.Mqtt/Broker.Listener.Mqtt.csproj --no-restore -c Release -o /app/publish
+
+FROM sitprivate.azurecr.io/ahi-runtime:6.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "Broker.Listener.Mqtt.dll"]

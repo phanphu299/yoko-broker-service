@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Confluent.Kafka" Version="2.3.0" />
+    <PackageReference Include="MQTTnet" Version="4.3.3.952" />
+    <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="4.3.3.952" />
+    <PackageReference Include="Polly.Core" Version="8.3.1" />
+    <PackageReference Include="AHI.Infrastructure.Cache.Redis" Version="2.1.0" />
+    <PackageReference Include="AHI.Infrastructure.Bus.ServiceBus" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FLS\FLS.csproj" />
+  </ItemGroup>
+
+</Project>

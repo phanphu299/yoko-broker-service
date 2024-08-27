@@ -1,0 +1,33 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;",
+    "ASPNETCORE_ENVIRONMENT": "Development",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "44a96f99-1e40-4cfa-b6b2-92b368f5f01c",
+    "CoapConnection": "Server=localhost;Username=0yOCQhzHCl1c5qar;Password=swagoRoekvdjDYlNugWOxaFxua1JAV",
+    "ProjectInfo": "0779433e-f36b-1410-8650-00f91313348c_0e79433e-f36b-1410-8650-00f91313348c_34e5ee62-429c-4724-b3d0-3891bd0a08c9",
+    "AzureServiceBus__Host": "127.0.0.1",
+    "AzureServiceBus__KeyName": "rabbitmq",
+    "AzureServiceBus__SharedAccessKey": "Pass1234!",
+    "KafkaOption__Enabled": false,
+    "KafkaOption__BootstrapServers": "localhost:9092",
+    "KafkaOption__Consumer__AutoOffsetReset": "Earliest",
+    "KafkaOption__Consumer__SessionTimeoutMs": 6000,
+    "KafkaOption__Consumer__AutoCommitInterval": 1000,
+    "KafkaOption__Consumer__BatchSize": 1000,
+    "KafkaOption__Producer__Linger": 100,
+    "KafkaOption__Producer__BatchSize": 2000,
+    "CoapTopicName": "+/devices/+/telemetry",
+    "CONFIG_COAP_URI_WILDCARD": true,
+    "Function__Master": "http://127.0.0.1:6001",
+    "AuthorizationCode": "localhost",
+    "Redis__Host": "127.0.0.1",
+    "Redis__Password": "Pass1234!",
+    "Redis__Database": "1",
+    "Redis__Ssl": "false",
+    "AzureFunctionsJobHost__logging__LogLevel__Default": "Trace",
+    "Logging__LogLevel__Default": "Trace",
+    "Logging__LogLevel__Microsoft": "Trace"
+  }
+}

@@ -1,0 +1,12 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build
+
+ ENV PATH="$PATH:/root/.dotnet/tools"
+
+ RUN dotnet tool install dotnet-roundhouse -g --version 1.3.1
+
+WORKDIR .
+COPY sql/. ./sql/
+# Uncomment if you need to insert the test data
+COPY tests/IntegrationTest/sql/runFirstAfterUp ./sql/runFirstAfterUp
+
+ENTRYPOINT [ "rh", "--connectionstring=Server=db;Database=broker_34e5ee62429c4724b3d03891bd0a08c9;User=sa;Password=Pass1234!;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;", "--connstringadmin=Server=db;Database=Master;User=sa;Password=Pass1234!;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;", "--sqlfilesdirectory=sql", "--environmentnames=DEV01", "--databaseType=sqlserver", "--silent", "--wt=true" ]

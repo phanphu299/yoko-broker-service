@@ -1,0 +1,60 @@
+trigger:
+  branches:
+    include:
+    - features/*/develop
+    - master
+  paths:
+    include:
+    - src/*
+    - tests/*
+    - sql/*
+
+pool:
+  name: 'DXP Hosted BE'
+
+parameters:
+  - name: Platform
+    displayName: Platform
+    type: string
+    default: 'Azure'
+    values:
+      - 'All'
+      - 'Azure'
+      # - 'AWS'
+      # - 'Alibaba'
+variables:
+  serviceName: $(Build.DefinitionName)
+  acrName: dxpprivate.azurecr.io
+  # aliAcrName: dxpprivate-registry.cn-shanghai.cr.aliyuncs.com
+  # awsRegion: ap-southeast-1
+  # ecrRegistry: 308741399797.dkr.ecr.ap-southeast-1.amazonaws.com
+  dockerFile: Dockerfile
+  dockerFileMigration: Dockerfile-migration
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  isDevelop: $[eq(variables['Build.SourceBranch'], 'refs/heads/features/dev/develop')]
+  synkOrganization: assethealthinsights
+  snykToken: 62fd5e89-8c04-4c72-b8fa-cc21101e5b26
+
+steps:
+- checkout: self
+  clean: true
+  fetchDepth: -1
+
+- script: mono $(Agent.WorkFolder)/_tool/GitVersion/GitVersion.exe /output buildserver /nofetch
+  displayName: 'Fetch Version'
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Set executable for build.sh
+      chmod +x build.sh
+      cp -vr build.sh build.ps1 build.cake cake.config EmqxTopicMigration $(Build.ArtifactStagingDirectory)
+  displayName: 'Copy migration data'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  displayName: 'Publish application'

@@ -1,0 +1,1 @@
+alter table schema_detail_options add [order] int not null default 1;

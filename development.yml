@@ -1,0 +1,19 @@
+version: "3"
+services:  
+  broker-service:
+    # replace username/repo:tag with your name and image details
+    build: 
+      context: .
+      dockerfile: Dockerfile
+  broker-migration:
+    # replace username/repo:tag with your name and image details
+    build: 
+      context: .
+      dockerfile: Dockerfile-migration
+  broker-function:
+    # replace username/repo:tag with your name and image details
+    build: 
+      context: .
+      dockerfile: Dockerfile-function
+    
+      
